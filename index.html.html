@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 日文實戰小抄</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: #f5f7ff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(110,90,255,.22), transparent 28%),
+      radial-gradient(circle at 85% 20%, rgba(0,210,255,.14), transparent 25%),
+      linear-gradient(135deg, #080b16, #11162a 55%, #090c17);
+  }
+  .wrap { width: min(1400px, 94%); margin: auto; padding: 34px 0 50px; }
+  header { margin-bottom: 24px; }
+  .eyebrow { color: #9da9ff; font-size: 13px; letter-spacing: .12em; font-weight: 700; }
+  h1 { margin: 6px 0 8px; font-size: clamp(30px, 5vw, 48px); }
+  .title { display:flex; align-items:center; gap:12px; }
+  .apex-icon {
+    width:46px; height:46px; flex:0 0 46px;
+    display:grid; place-items:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.13);
+    box-shadow:0 8px 24px rgba(0,0,0,.2);
+  }
+  .apex-icon svg { width:30px; height:30px; fill:#fff; }
+  .apex-icon .cut { fill:#11162a; }
+  .sub { color: #aeb6cb; margin: 0; }
+  .toolbar {
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    margin: 22px 0 16px;
+  }
+  .search {
+    flex: 1 1 280px; display: flex; gap: 8px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 18px; padding: 8px;
+    backdrop-filter: blur(18px);
+  }
+  input {
+    width: 100%; border: 0; outline: 0; background: transparent;
+    color: white; padding: 10px 12px; font-size: 16px;
+  }
+  input::placeholder { color: #8f98ad; }
+  button {
+    border: 0; color: white; cursor: pointer; font: inherit;
+  }
+  .search button, .favorite-filter {
+    border-radius: 13px; padding: 10px 15px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.10);
+  }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 9px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.10);
+    color: #c9d0df;
+  }
+  .chip.active, .favorite-filter.active {
+    background: rgba(132,117,255,.25);
+    border-color: rgba(160,150,255,.55);
+    color: white;
+  }
+  .status { color: #8f98ad; font-size: 14px; margin: 16px 2px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+    gap: 15px;
+  }
+  .card {
+    position: relative; min-height: 230px; padding: 20px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255,255,255,.16), rgba(255,255,255,.085));
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: 0 20px 55px rgba(0,0,0,.30), 0 5px 16px rgba(0,0,0,.14);
+    backdrop-filter: blur(18px);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .card:hover { transform: translateY(-6px); border-color: rgba(210,205,255,.48);
+    box-shadow: 0 27px 65px rgba(0,0,0,.36), 0 8px 22px rgba(0,0,0,.18), 0 0 18px rgba(255,255,255,.12);
+}
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .tag {
+    font-size: 12px; color: #b7bfff;
+    background: rgba(132,117,255,.14);
+    padding: 5px 9px; border-radius: 999px;
+  }
+  .heart {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.11);
+    font-size: 22px; line-height: 1;
+  }
+  .heart.active { color: #ff5478; background: rgba(255,84,120,.12); }
+  .jp { margin-top: 20px; font-size: 30px; font-weight: 800; letter-spacing: .03em; }
+  .zh { margin-top: 3px; color: #dbe0ec; font-size: 18px; font-weight: 650; }
+  .kana { margin-top: 12px; color: #aab5ff; font-size: 17px; }
+  .romaji { color: #8993a9; font-size: 14px; margin-top: 4px; }
+  .mnemonic {
+    margin-top: 13px; padding: 9px 11px; border-radius: 12px;
+    background: rgba(0,0,0,.14); color: #cdd4e5; font-size: 14px;
+  }
+  .speak {
+    margin-top: 15px; width: 100%; padding: 10px 12px;
+    border-radius: 13px; background: rgba(255,255,255,.09);
+    border: 1px solid rgba(255,255,255,.10);
+  }
+  .speak:hover, .search button:hover, .favorite-filter:hover, .chip:hover {
+    background: rgba(255,255,255,.14);
+  }
+  .empty {
+    text-align: center; padding: 60px 20px; color: #aab2c5;
+    border: 1px dashed rgba(255,255,255,.15); border-radius: 24px;
+  }
+  footer { margin-top: 28px; color: #707a91; font-size: 13px; text-align: center; }
+  @media (max-width: 600px) {
+    .wrap { width: 92%; padding-top: 24px; }
+    .grid { grid-template-columns: 1fr; }
+    .card { min-height: 215px; }
+  }
+
+.subtitle-note{
+  margin: 6px 0 18px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aeb6cb;
+  letter-spacing: .01em;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">FOR GAMING VOICE CHAT</div>
+    <h1 class="title">
+      <span class="apex-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="img">
+          <path d="M32 4 59 54H45L32 28 19 54H5L32 4Z"/>
+          <path d="M32 25 40 42H24L32 25Z" class="cut"/>
+        </svg>
+      </span>
+      <span>簡易欸配日文</span>
+    </h1>
+    <p class="sub">打 A 配、遊戲語音都能快速查的日文單詞庫</p>
+<p class="subtitle-note">「空耳表達不精，建議參考語音讀音」</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="search" type="search" placeholder="搜尋中文、日文、假名、羅馬拼音、空耳…" autocomplete="off">
+      <button id="searchBtn">搜尋</button>
+    </div>
+    <button class="favorite-filter" id="favBtn">♡ 我的收藏</button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+  <div class="status" id="status"></div>
+  <main class="grid" id="grid"></main>
+  <footer>收藏只會存在你自己的瀏覽器，不需要登入。</footer>
+</div>
+
+<script>
+// ==================================================
+// ⭐⭐⭐ 你以後主要只需要修改這裡 ⭐⭐⭐
+// 新增單詞：複製一個物件，填入資料即可。
+// category 請使用：戰鬥 / 移動 / 溝通 / 物品 / 其他
+// ==================================================
+const words = [
+  { id:"1", category:"戰鬥", chinese:"撤退", japanese:"逃げる", kana:"にげる", romaji:"nigeru", mnemonic:"尼給嚕" },
+  { id:"2", category:"移動", chinese:"上面", japanese:"上", kana:"うえ", romaji:"ue", mnemonic:"嗚欸" },
+  { id:"3", category:"移動", chinese:"下面", japanese:"下", kana:"した", romaji:"shita", mnemonic:"西他" },
+  { id:"4", category:"移動", chinese:"前面", japanese:"前", kana:"まえ", romaji:"mae", mnemonic:"媽欸" },
+  { id:"5", category:"移動", chinese:"後面", japanese:"後ろ", kana:"うしろ", romaji:"ushiro", mnemonic:"嗚西漏" },
+  { id:"6", category:"移動", chinese:"左邊", japanese:"左", kana:"ひだり", romaji:"hidari", mnemonic:"he搭哩" },
+  { id:"7", category:"移動", chinese:"右邊", japanese:"右", kana:"みぎ", romaji:"migi", mnemonic:"米gi" },
+  { id:"8", category:"溝通", chinese:"階梯", japanese:"階段", kana:"かいだん", romaji:"kaidan", mnemonic:"開當" },
+  { id:"9", category:"戰鬥", chinese:"殘血", japanese:"ロー", kana:"ろー", romaji:"roo", mnemonic:"摟" },
+  { id:"10", category:"戰鬥", chinese:"破甲", japanese:"割った", kana:"わった", romaji:"Watta", mnemonic:"哇搭" },
+  { id:"11", category:"物品", chinese:"繩索", japanese:"ジップライン", kana:"じっぷらいん", romaji:"jippurain", mnemonic:"雞噗拉因" },
+  { id:"12", category:"溝通", chinese:"復活", japanese:"リスポーン", kana:"リスポーン", romaji:"risupoon", mnemonic:"搜誰" },
+  { id:"13", category:"戰鬥", chinese:"拉人", japanese:"起こす", kana:"おこす", romaji:"okosu", mnemonic:"喔扣斯" },
+  { id:"14", category:"物品", chinese:"大電", japanese:"バッテリー", kana:"ばってりー", romaji:"batterii", mnemonic:"巴特哩", speechText:"バッテリー。" },
+  { id:"15", category:"溝通", chinese:"回復", japanese:"巻く", kana:"まく", romaji:"MaKu", mnemonic:"媽酷" },
+,
+  { id:"17", category:"溝通", chinese:"一個人", japanese:"一人", kana:"ひとり", romaji:"hitori", mnemonic:"he偷哩" },
+  { id:"18", category:"溝通", chinese:"兩個人", japanese:"二人", kana:"ふたり", romaji:"futari", mnemonic:"呼他哩" },
+  { id:"19", category:"溝通", chinese:"三個人", japanese:"三人", kana:"さんにん", romaji:"sannin", mnemonic:"桑寧" },
+  { id:"20", category:"溝通", chinese:"敵人", japanese:"敵", kana:"てき", romaji:"teki", mnemonic:"貼ki" },
+  { id:"21", category:"溝通", chinese:"別隊", japanese:"別パー", kana:"べつパー", romaji:"betsu paa", mnemonic:"杯次趴" },
+  { id:"22", category:"溝通", chinese:"黃雀", japanese:"漁夫", kana:"ぎょふ", romaji:"gyofu", mnemonic:"給喔夫" },
+
+  { id:"23", category:"物品", chinese:"護甲", japanese:"アーマー", kana:"アーマー", romaji:"aamaa", mnemonic:"啊媽" },
+  { id:"24", category:"物品", chinese:"小電", japanese:"セル", kana:"せる", romaji:"seru", mnemonic:"誰嚕" },
+  { id:"25", category:"物品", chinese:"小補", japanese:"肉", kana:"にく", romaji:"niku", mnemonic:"逆哭" },
+  { id:"26", category:"物品", chinese:"絕招促進劑", japanese:"アルソック", kana:"アルソック", romaji:"arusokku", mnemonic:"阿魯索哭" },
+  { id:"27", category:"物品", chinese:"子彈", japanese:"弾", kana:"たま", romaji:"tama", mnemonic:"他碼" },
+  { id:"28", category:"物品", chinese:"復活台/偵查台", japanese:"ビーコン", kana:"ビーコン", romaji:"bii kon", mnemonic:"逼控" },
+  { id:"29", category:"物品", chinese:"死亡盒", japanese:"デスボー", kana:"デスボー", romaji:"desuboo", mnemonic:"爹死波" },
+  { id:"30", category:"物品", chinese:"空投", japanese:"ケアパケ", kana:"ケアパケ", romaji:"keapake", mnemonic:"ke阿趴ke" },
+  { id:"31", category:"物品", chinese:"複製器", japanese:"レプリケーター", kana:"レプリケーター", romaji:"repurikeetaa", mnemonic:"雷普哩ke塔" },
+
+  { id:"32", category:"技能", chinese:"大招", japanese:"ウルト", kana:"ウルト", romaji:"uruto", mnemonic:"烏嚕偷" },
+  { id:"33", category:"技能", chinese:"傳送門", japanese:"ポータル", kana:"ポータル", romaji:"pootaru", mnemonic:"波他嚕" },
+  { id:"34", category:"技能", chinese:"泡泡盾", japanese:"ドーム", kana:"ドーム", romaji:"doomu", mnemonic:"兜母" },
+  { id:"35", category:"技能", chinese:"無人機", japanese:"ドローン", kana:"ドローン", romaji:"doroon", mnemonic:"多隆" },
+
+  { id:"36", category:"溝通", chinese:"那裡", japanese:"そっち", kana:"そっち", romaji:"socchi", mnemonic:"搜七" },
+  { id:"37", category:"溝通", chinese:"這裡", japanese:"こっち", kana:"こっち", romaji:"kocchi", mnemonic:"扣七" },
+  { id:"38", category:"溝通", chinese:"那個", japanese:"その", kana:"その", romaji:"sono", mnemonic:"搜no" },
+  { id:"39", category:"溝通", chinese:"這個", japanese:"この", kana:"この", romaji:"kono", mnemonic:"扣no" },
+  { id:"40", category:"溝通", chinese:"裡面", japanese:"中", kana:"なか", romaji:"naka", mnemonic:"哪卡" },
+
+  { id:"41", category:"其他", chinese:"石頭", japanese:"岩", kana:"いわ", romaji:"iwa", mnemonic:"伊哇" },
+  { id:"42", category:"其他", chinese:"箱子", japanese:"箱", kana:"はこ", romaji:"hako", mnemonic:"哈扣" },
+  { id:"43", category:"其他", chinese:"建築物", japanese:"建物", kana:"たてもの", romaji:"tatemono", mnemonic:"他貼摸no" },
+  { id:"44", category:"其他", chinese:"門", japanese:"ドア", kana:"ドア", romaji:"doa", mnemonic:"兜啊" },
+  { id:"45", category:"其他", chinese:"屋頂", japanese:"屋根", kana:"やね", romaji:"yane", mnemonic:"呀捏" },
+
+  { id:"46", category:"戰鬥", chinese:"大殘", japanese:"激ロー", kana:"げきロー", romaji:"gekirō", mnemonic:"給ki摟" },
+  { id:"47", category:"戰鬥", chinese:"打肉", japanese:"肉", kana:"にく", romaji:"niku", mnemonic:"逆哭" },
+  { id:"48", category:"溝通", chinese:"有人", japanese:"いる", kana:"いる", romaji:"iru", mnemonic:"椅嚕" },
+  { id:"49", category:"溝通", chinese:"有物品", japanese:"ある", kana:"ある", romaji:"aru", mnemonic:"阿嚕" },
+  { id:"50", category:"溝通", chinese:"沒有", japanese:"ない", kana:"ない", romaji:"nai", mnemonic:"奈以" },
+  { id:"52", category:"溝通", chinese:"不夠", japanese:"足りない", kana:"たりない", romaji:"tarinai", mnemonic:"他哩奈以" },
+  { id:"51", category:"溝通", chinese:"想要", japanese:"欲しい", kana:"ほしい", romaji:"hoshii", mnemonic:"齁西" },
+  { id:"53", category:"角色", chinese:"變幻", japanese:"オルター", kana:"オルター", romaji:"orutaa", mnemonic:"喔嚕他" },
+  { id:"54", category:"角色", chinese:"艾許", japanese:"アッシュ", kana:"アッシュ", romaji:"asshu", mnemonic:"阿修" },
+  { id:"55", category:"角色", chinese:"彈道", japanese:"バリスティック", kana:"バリスティック", romaji:"barisutikku", mnemonic:"巴哩斯踢哭" },
+  { id:"56", category:"角色", chinese:"邦加羅爾", japanese:"バンガロール", kana:"バンガロール", romaji:"bangarooru", mnemonic:"班嘎摟嚕" },
+  { id:"57", category:"角色", chinese:"尋血犬", japanese:"ブラッドハウンド", kana:"ブラッドハウンド", romaji:"buraddo haundo", mnemonic:"不辣多好嗯多" },
+  { id:"58", category:"角色", chinese:"卡特莉絲", japanese:"カタリスト", kana:"カタリスト", romaji:"katarisuto", mnemonic:"卡他哩斯偷" },
+  { id:"59", category:"角色", chinese:"腐蝕", japanese:"コースティック", kana:"コースティック", romaji:"koosutikku", mnemonic:"扣斯踢哭" },
+  { id:"60", category:"角色", chinese:"導管", japanese:"コンジット", kana:"コンジット", romaji:"konjitto", mnemonic:"控吉偷" },
+  { id:"61", category:"角色", chinese:"暗碼士", japanese:"クリプト", kana:"クリプト", romaji:"kuriputo", mnemonic:"哭哩撲偷" },
+  { id:"62", category:"角色", chinese:"轟哥", japanese:"ヒューズ", kana:"ヒューズ", romaji:"hyuuzu", mnemonic:"修滋" },
+  { id:"63", category:"角色", chinese:"直布羅陀", japanese:"ジブラルタル", kana:"ジブラルタル", romaji:"jiburarutaru", mnemonic:"吉不拉魯他魯" },
+  { id:"64", category:"角色", chinese:"天際線", japanese:"ホライゾン", kana:"ホライゾン", romaji:"horaizon", mnemonic:"齁拉伊zone" },
+  { id:"65", category:"角色", chinese:"生命線", japanese:"ライフライン", kana:"ライフライン", romaji:"raifurain", mnemonic:"來夫拉因" },
+  { id:"66", category:"角色", chinese:"羅芭", japanese:"ローバ", kana:"ローバ", romaji:"rooba", mnemonic:"摟巴" },
+  { id:"67", category:"角色", chinese:"瘋狂瑪吉", japanese:"マッドマギー", kana:"マッドマギー", romaji:"maddo magii", mnemonic:"馬多馬給" },
+  { id:"68", category:"角色", chinese:"幻象", japanese:"ミラージュ", kana:"ミラージュ", romaji:"miraaju", mnemonic:"米拉滋" },
+  { id:"69", category:"角色", chinese:"紐卡索", japanese:"ニューキャッスル", kana:"ニューキャッスル", romaji:"nyuu kyassuru", mnemonic:"妞卡斯魯" },
+  { id:"70", category:"角色", chinese:"辛烷", japanese:"オクタン", kana:"オクタン", romaji:"okutan", mnemonic:"喔哭他" },
+  { id:"71", category:"角色", chinese:"探路者", japanese:"パスファインダー", kana:"パスファインダー", romaji:"pasu faindaa", mnemonic:"趴斯發因達" },
+  { id:"72", category:"角色", chinese:"蕾帕特", japanese:"ランパート", kana:"ランパート", romaji:"ranpaato", mnemonic:"懶趴偷" },
+  { id:"73", category:"角色", chinese:"亡靈", japanese:"レヴナント", kana:"レヴナント", romaji:"revunanto", mnemonic:"雷不難偷" },
+  { id:"74", category:"角色", chinese:"席爾", japanese:"シア", kana:"シア", romaji:"shia", mnemonic:"西啊" },
+  { id:"75", category:"角色", chinese:"雀影", japanese:"スパロー", kana:"スパロー", romaji:"suparoo", mnemonic:"斯趴摟" },
+  { id:"76", category:"角色", chinese:"瓦爾基里", japanese:"ヴァルキリー", kana:"ヴァルキリー", romaji:"varukirii", mnemonic:"哇魯給哩" },
+  { id:"77", category:"角色", chinese:"萬塔捷", japanese:"ヴァンテージ", kana:"ヴァンテージ", romaji:"vanteeji", mnemonic:"萬貼吉" },
+  { id:"78", category:"角色", chinese:"華森", japanese:"ワットソン", kana:"ワットソン", romaji:"wattoson", mnemonic:"哇偷松" },
+  { id:"79", category:"角色", chinese:"惡靈", japanese:"レイス", kana:"レイス", romaji:"reisu", mnemonic:"雷斯" },
+  { id:"80", category:"角色", chinese:"艾瑟兒", japanese:"アクセル", kana:"アクセル", romaji:"akuseru", mnemonic:"阿哭斯魯" },
+];
+// ==================================================
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const status = document.getElementById("status");
+const chips = document.getElementById("chips");
+const favBtn = document.getElementById("favBtn");
+let currentCategory = "全部";
+let onlyFavorites = false;
+let favorites = new Set(JSON.parse(localStorage.getItem("jpCheatFavorites") || "[]"));
+
+const categories = ["全部", "戰鬥", "移動", "溝通", "物品", "角色", "技能", "其他"];
+
+function saveFavorites() {
+  localStorage.setItem("jpCheatFavorites", JSON.stringify([...favorites]));
+}
+
+function renderChips() {
+  chips.innerHTML = categories.map(c =>
+    `<button class="chip ${c === currentCategory ? "active" : ""}" data-category="${c}">${c}</button>`
+  ).join("");
+  chips.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentCategory = btn.dataset.category;
+      renderChips();
+      render();
+    });
+  });
+}
+
+function matches(word, q) {
+  if (!q) return true;
+  const haystack = [
+    word.category, word.chinese, word.japanese,
+    word.kana, word.romaji, word.mnemonic
+  ].join(" ").toLowerCase();
+  return haystack.includes(q.toLowerCase());
+}
+
+function render() {
+  const q = search.value.trim();
+  const result = words.filter(w =>
+    (currentCategory === "全部" || w.category === currentCategory) &&
+    (!onlyFavorites || favorites.has(w.id)) &&
+    matches(w, q)
+  );
+
+  status.textContent = `顯示 ${result.length} / ${words.length} 個單詞`;
+
+  if (!result.length) {
+    grid.innerHTML = `<div class="empty">😿 找不到相關單詞<br><small>試試其他關鍵字吧！</small></div>`;
+    return;
+  }
+
+  grid.innerHTML = result.map(w => `
+    <article class="card">
+      <div class="top">
+        <span class="tag">${w.category}</span>
+        <button class="heart ${favorites.has(w.id) ? "active" : ""}"
+          data-fav="${w.id}" aria-label="收藏">${favorites.has(w.id) ? "♥" : "♡"}</button>
+      </div>
+      <div class="jp">${w.japanese}</div>
+      <div class="zh">${w.chinese}</div>
+      <div class="kana">${w.kana}</div>
+      <div class="romaji">${w.romaji}</div>
+      <div class="mnemonic">💡 空耳：${w.mnemonic}</div>
+      <button class="speak" data-speak="${w.id}">🔊 播放日文</button>
+    </article>
+  `).join("");
+
+  grid.querySelectorAll("[data-fav]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.fav;
+      favorites.has(id) ? favorites.delete(id) : favorites.add(id);
+      saveFavorites();
+      render();
+    });
+  });
+
+  grid.querySelectorAll("[data-speak]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.speak;
+      btn.disabled = true;
+      speakWord(id);
+      setTimeout(() => { btn.disabled = false; }, 300);
+    });
+  });
+}
+
+// 語音播放使用 kana（假名）作為朗讀來源，避免瀏覽器自行猜漢字讀音。
+let japaneseVoices = [];
+
+function loadJapaneseVoices() {
+  if (!("speechSynthesis" in window)) return;
+  japaneseVoices = speechSynthesis.getVoices().filter(v =>
+    /^ja(?:-|_)/i.test(v.lang)
+  );
+}
+
+if ("speechSynthesis" in window) {
+  loadJapaneseVoices();
+  speechSynthesis.addEventListener("voiceschanged", loadJapaneseVoices);
+}
+
+function pickJapaneseVoice() {
+  // 有些瀏覽器第一次執行時 voiceschanged 還沒完成，
+  // 所以每次播放前都再抓一次，避免後面的單詞突然沒有聲音。
+  const voices = ("speechSynthesis" in window)
+    ? speechSynthesis.getVoices()
+    : [];
+  const available = voices.filter(v => /^ja(?:-|_)/i.test(v.lang));
+  if (available.length) japaneseVoices = available;
+
+  if (!japaneseVoices.length) return null;
+
+  // 優先較完整的日文語音名稱；不同裝置能提供的語音會不同，
+  // 所以最後仍會退回第一個可用的 ja 語音。
+  const preferred = [
+    /Google.*日本語/i,
+    /Google.*Japanese/i,
+    /Microsoft.*Japanese/i,
+    /Microsoft.*日本語/i,
+    /Kyoko/i,
+    /Otoya/i,
+    /Nanami/i,
+    /Keita/i
+  ];
+
+  for (const pattern of preferred) {
+    const match = japaneseVoices.find(v => pattern.test(v.name));
+    if (match) return match;
+  }
+
+  return japaneseVoices[0];
+}
+
+function speakWord(id) {
+  const word = words.find(w => w.id === id);
+  if (!word || !("speechSynthesis" in window)) {
+    alert("你的瀏覽器不支援日文語音播放。");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  // 用假名而不是漢字，避免瀏覽器自行猜讀音。
+  // 稍微放慢速度、維持正常音高，讓短詞比較自然。
+  const text = word.speechText || word.kana;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "ja-JP";
+  utter.rate = 0.95;
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const jpVoice = pickJapaneseVoice();
+  if (jpVoice) utter.voice = jpVoice;
+
+  // 某些 Chrome/Windows 語音在 cancel() 後緊接著 speak() 會偶發失效。
+  // 先讓語音佇列清乾淨，再播放一次。
+  speechSynthesis.cancel();
+  setTimeout(() => speechSynthesis.speak(utter), 30);
+}
+
+favBtn.addEventListener("click", () => {
+  onlyFavorites = !onlyFavorites;
+  favBtn.classList.toggle("active", onlyFavorites);
+  favBtn.textContent = onlyFavorites ? "♥ 我的收藏" : "♡ 我的收藏";
+  render();
+});
+
+search.addEventListener("input", render);
+document.getElementById("searchBtn").addEventListener("click", render);
+search.addEventListener("keydown", e => {
+  if (e.key === "Enter") render();
+});
+
+renderChips();
+render();
+</script>
+
+
+</body>
+</html>
